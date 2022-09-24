@@ -4,6 +4,6 @@ tensorflow_addons==0.17.1
 h5py==3.7.0
 Pillow==9.2.0
 tqdm==4.64.1
-protobuf==3.19
+protobuf==3.19.5
 ftfy==6.1.1
 regex==2022.9.13
