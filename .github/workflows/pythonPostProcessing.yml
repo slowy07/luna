@@ -1,0 +1,37 @@
+name: PythonPostPorcessing
+
+# Controls when the workflow will run
+# Triggers the workflow on push or pull request events but only for the "main" branch
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  python-checks:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install black codespell
+          
+      # runs the black formarter (format python code)
+      - name: run black
+        run: black ./
+        shell: bash
+        
+      # runs the codespell (list all the typos)
+      - name: run codespell
+        run: codespell
+        shell: bash
