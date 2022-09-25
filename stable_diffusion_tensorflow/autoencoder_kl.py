@@ -3,10 +3,11 @@ from tensorflow import keras
 import tensorflow_addons as tfa
 from .layers import apply_seq, PaddedConv2D
 
+
 class AttentionBlock(keras.layers.Layer):
     def __init__(self, channels):
         super().__init__()
-        self.norm = tfa.layers.GroupNormalization(epsilon = 1e-5)
+        self.norm = tfa.layers.GroupNormalization(epsilon=1e-5)
         self.q = PaddedConv2D(channels, 1)
         self.k = PaddedConv2D(channels, 1)
         self.v = PaddedConv2D(channels, 1)
@@ -31,10 +32,11 @@ class AttentionBlock(keras.layers.Layer):
         h_ = tf.reshape(h_, (-1, h, w, c))
         return x + self.proj_out(h_)
 
-def ResnetBlock(keras.layers.Layer):
+
+class ResnetBlock(keras.layers.Layer):
     def __init__(self, in_channels, out_channels):
         super().__init__()
-        self.norm1 = tfa.layers.GroupNormalization(epsilon = 1e-5)
+        self.norm1 = tfa.layers.GroupNormalization(epsilon=1e-5)
         self.conv1 = PaddedConv2D(out_channels, 3, padding=1)
         self.norm2 = tfa.layers.GroupNormalization(epsilon=1e-5)
         self.conv2 = PaddedConv2D(out_channels, 3, padding=1)
@@ -43,11 +45,12 @@ def ResnetBlock(keras.layers.Layer):
             if in_channels != out_channels
             else lambda x: x
         )
-    
+
     def call(self, x):
         h = self.conv1(keras.activations.swish(self.norm1(x)))
         h = self.conv2(keras.activations.swish(self.norm2(h)))
         return self.nin_shorcut(x) + h
+
 
 class Decoder(keras.Sequential):
     def __init__(self):

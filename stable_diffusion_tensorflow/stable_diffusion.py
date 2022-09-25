@@ -13,38 +13,43 @@ from .constants import _UNCONDITIONAL_TOKENS, _ALPHAS_CUMPROD
 
 MAX_TEXT_LEN = 77
 
+
 class Text2Image:
-    def __init__(self, img_height=1000, img_width=1000, jit_compile=False, download_weights=True):
+    def __init__(
+        self, img_height=1000, img_width=1000, jit_compile=False, download_weights=True
+    ):
         self.img_height = img_height
         self.img_width = img_width
         self.tokenizer = SimpleTokenizer()
 
-        text_encoder, diffusion_model, decoder = get_models(img_height, img_width, download_weights=download_weights)
+        text_encoder, diffusion_model, decoder = get_models(
+            img_height, img_width, download_weights=download_weights
+        )
         self.text_encoder = text_encoder
         self.diffusion_model = diffusion_model
         self.decoder = decoder
         if jit_compile:
-            self.text_encoder.compile(jit_compile = True)
-            self.diffusion_model.compile(jit_compile = True)
-            self.decoder.compile(jit_compile = True)
+            self.text_encoder.compile(jit_compile=True)
+            self.diffusion_model.compile(jit_compile=True)
+            self.decoder.compile(jit_compile=True)
 
     def generate(
         self,
         prompt,
-        batch_size = 1,
-        num_steps = 25,
-        unconditional_guidance_scale = 7.5
-        temperature = 1,
-        seed = None,
+        batch_size=1,
+        num_steps=25,
+        unconditional_guidance_scale=7.5,
+        temperature=1,
+        seed=None,
     ):
         inputs = self.tokenizer.encode(prompt)
         assert len(inputs) < 77, "Prompt is too long (should be < 77 tokens)"
         phrase = inputs + [49407] * (77 - len(inputs))
         phrase = np.array(phrase)[None].astype("int32")
-        phrase = np.repeat(phrase, batch_size, axis = 0)
+        phrase = np.repeat(phrase, batch_size, axis=0)
 
         pos_ids = np.array(list(range(77)))[None].astype("int32")
-        pos_ids = np.repeat(pos_ids, batch_size, axis = 0)
+        pos_ids = np.repeat(pos_ids, batch_size, axis=0)
         context = self.text_encoder.predict_on_batch([phrase, pos_ids])
         unconditional_tokens = np.array(_UNCONDITIONAL_TOKENS)[None].astype("int32")
         unconditional_tokens = np.repeat(unconditional_tokens, batch_size, axis=0)
@@ -69,18 +74,18 @@ class Text2Image:
                 batch_size,
             )
             a_t, a_prev = alphas[index], alphas_prev[index]
-            latent, pred_x0 = self.get_x_prev_and_pred_x0 (
-                latentm e_t, index, a_t, a_prev, temperature, seed
+            latent, pred_x0 = self.get_x_prev_and_pred_x0(
+                latent, e_t, index, a_t, a_prev, temperature, seed
             )
 
         decoded = self.decoder.predict_on_batch(latent)
         decoded = ((decoded + 1) / 2) * 255
         return np.clip(decoded, 0, 255).astype("uint8")
 
-    def timestep_embedding(self, timesteps, dim = 320, max_period = 10000):
+    def timestep_embedding(self, timesteps, dim=320, max_period=10000):
         half = dim // 2
         freq = np.exp(
-            -math.log(max_period) * np.arange(0, half, dtype = "float32") / half
+            -math.log(max_period) * np.arange(0, half, dtype="float32") / half
         )
         args = np.array(timesteps) * freqs
         embedding = np.concatenate([np.cos(arg), np.sin(args)])
@@ -90,14 +95,14 @@ class Text2Image:
         self,
         latent,
         t,
-        context, 
+        context,
         unconditional_context,
         unconditional_guidance_scale,
         batch_size,
     ):
         timesteps = np.array([t])
         t_emb = self.timestep_embedding(timesteps)
-        t_emb = np.repeat(t_emb, batch_size, axis = 0)
+        t_emb = np.repeat(t_emb, batch_size, axis=0)
         unconditional_latent = self.diffusion_model.predict_on_batch(
             [latent, t_emb, unconditional_context]
         )
@@ -111,7 +116,7 @@ class Text2Image:
         sqrt_one_minus_at = math.sqrt(1 - a_t)
         pred_x0 = (x - sqrt_one_minus_at * e_t) / math.sqrt(a_t)
 
-        dir_xt = math.sqrt(1.0 - a_prev - sigma_t**2) * e_t
+        dir_xt = math.sqrt(1.0 - a_prev - sigma_t ** 2) * e_t
         noise = sigma_t * tf.random.normal(x.shape, seed=seed) * temperature
         x_prev = math.sqrt(a_prev) * pred_x0 + dir_xt
         return x_prev, pred_x0
@@ -124,10 +129,11 @@ class Text2Image:
         latent = tf.random.normal((batch_size, n_h, n_w, 4), seed=seed)
         return latent, alphas, alphas_prev
 
-def get_models(img_height, img_width, download_weights = True):
+
+def get_models(img_height, img_width, download_weights=True):
     n_h = img_height // 8
     n_w = img_width // 8
-    
+
     input_word_ids = keras.layers.Input(shape=(MAX_TEXT_LEN,), dtype="int32")
     input_pos_ids = keras.layers.Input(shape=(MAX_TEXT_LEN,), dtype="int32")
     embeds = CLIPTextTransformer()([input_word_ids, input_pos_ids])
@@ -142,15 +148,15 @@ def get_models(img_height, img_width, download_weights = True):
     )
 
     if donwnload_weights:
-        text_encoder_weights_fpath = keras.utils.get_file (
+        text_encoder_weights_fpath = keras.utils.get_file(
             origin="https://huggingface.co/fchollet/stable-diffusion/resolve/main/text_encoder.h5",
             file_hash="d7805118aeb156fc1d39e38a9a082b05501e2af8c8fbdc1753c9cb85212d6619",
         )
-        diffusion_model_weights_fpath = keras.utils.get_file (
+        diffusion_model_weights_fpath = keras.utils.get_file(
             origin="https://huggingface.co/fchollet/stable-diffusion/resolve/main/diffusion_model.h5",
             file_hash="a5b2eea58365b18b40caee689a2e5d00f4c31dbcb4e1d58a9cf1071f55bbbd3a",
         )
-        decoder_weights_fpath = keras.utils.get_file (
+        decoder_weights_fpath = keras.utils.get_file(
             origin="https://huggingface.co/fchollet/stable-diffusion/resolve/main/decoder.h5",
             file_hash="6d3c5ba91d5cc2b134da881aaa157b2d2adc648e5625560e3ed199561d0e39d5",
         )
@@ -159,4 +165,3 @@ def get_models(img_height, img_width, download_weights = True):
         diffusion_model.load_weights(diffusion_model_weights_fpath)
         decoder.load_weights(decoder_weights_fpath)
     return text_encoder, diffusion_model, decoder
-

@@ -5,13 +5,14 @@ import numpy as np
 
 from .layers import quick_gelu
 
+
 class CLIPAttention(keras.layers.Layer):
     def __init__(self):
         super().__init__()
         self.embed_dim = 768
         self.num_heads = 12
         self.head_dim = self.embed_dim // self.num_heads
-        self.scale = self.head_dim**-0.5
+        self.scale = self.head_dim ** -0.5
         self.q_proj = keras.layers.Dense(self.embed_dim)
         self.k_proj = keras.layers.Dense(self.embed_dim)
         self.v_proj = keras.layers.Dense(self.embed_dim)
@@ -47,15 +48,16 @@ class CLIPAttention(keras.layers.Layer):
         attn_output = tf.reshape(
             attn_output, (-1, self.num_heads, tgt_len, self.head_dim)
         )
-        attn_output = keras.layers.Permute((2,  1,  3))(attn_output)
-        attn_output =  tf.reshape(attn_output, (-1, tgt_len, embed_dim))
+        attn_output = keras.layers.Permute((2, 1, 3))(attn_output)
+        attn_output = tf.reshape(attn_output, (-1, tgt_len, embed_dim))
 
         return self.out_proj(attn_output)
+
 
 class CLIPEncoderLayer(keras.layers.Layer):
     def __init__(self):
         super().__init__()
-        self.layer_norm1 = keras.layers.LayerNormalization(epsilon = 1e-5)
+        self.layer_norm1 = keras.layers.LayerNormalization(epsilon=1e-5)
         self.self_attn = CLIPAttention()
         self.layer_norm2 = keras.layers.LayerNormalization(epsilon=1e-5)
         self.fc1 = keras.layers.Dense(3072)
@@ -76,6 +78,7 @@ class CLIPEncoderLayer(keras.layers.Layer):
 
         return residual + hidden_states
 
+
 class CLIPEncoder(keras.layers.Layer):
     def __init__(self):
         super().__init__()
@@ -87,30 +90,32 @@ class CLIPEncoder(keras.layers.Layer):
             hidden_states = l([hidden_states, causal_attention_mask])
         return hidden_states
 
+
 class CLIPTextEmbeddings(keras.layers.Layer):
-    def __init__(self, n_words = 77):
+    def __init__(self, n_words=77):
         super().__init__()
         self.token_embedding_layer = keras.layers.Embedding(
-            49408, 768, name = "token_embedding"
+            49408, 768, name="token_embedding"
         )
         self.position_embedding_layer = keras.layers.Embedding(
-            n_words, 768, name = "position_embedding"
+            n_words, 768, name="position_embedding"
         )
-    
+
     def call(self, inputs):
         input_ids, position_ids = inputs
         word_embeddings = self.token_embedding_layer(input_ids)
         position_embeddings = self.position_embedding_layer(position_ids)
         return word_embeddings + position_embeddings
 
+
 class CLIPTextTransformer(keras.models.Model):
-    def __init__(self, n_words = 77):
+    def __init__(self, n_words=77):
         super().__init__()
-        self.embeddings = CLIPTextEmbeddings(n_words = n_words)
+        self.embeddings = CLIPTextEmbeddings(n_words=n_words)
         self.encoder = CLIPEncoder()
-        self.final_layer_norm = keras.layers.LayerNormalization(option  = 1e-5)
+        self.final_layer_norm = keras.layers.LayerNormalization(option=1e-5)
         self.causal_attention_mask = tf.constant(
-            np.triu(np.ones((1, ,1 , 77, 77), dtype = "float32") * -np.inf, k = 1)
+            np.triu(np.ones((1, 1, 77, 77), dtype="float32") * -np.inf, k=1)
         )
 
     def call(self, inputs):
@@ -118,4 +123,3 @@ class CLIPTextTransformer(keras.models.Model):
         x = self.embeddigns([input_ids, position_ids])
         x = self.encoder([x, self.causal_attention_mask])
         return self.final_layer_norm(x)
-
