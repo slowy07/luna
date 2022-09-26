@@ -16,7 +16,7 @@ class PaddedConv2D(keras.layers.Layer):
 
 
 class GEGLU(keras.layers.Layer):
-    def __init__(self, dim_cut):
+    def __init__(self, dim_out):
         super().__init__()
         self.proj = keras.layers.Dense(dim_out * 2)
         self.dim_out = dim_out
@@ -28,7 +28,7 @@ class GEGLU(keras.layers.Layer):
 
 
 def gelu(x):
-    tanh_res = keras.activation.tanh(x * 0.7978845608 * (1 + 0.044715 * (x ** 2)))
+    tanh_res = keras.activations.tanh(x * 0.7978845608 * (1 + 0.044715 * (x**2)))
     return 0.5 * x * (1 + tanh_res)
 
 
