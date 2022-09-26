@@ -10,7 +10,7 @@ class ResBlock(keras.layers.Layer):
         super().__init__()
         self.in_layers = [
             tfa.layers.GroupNormalization(epsilon=1e-5),
-            keras.actiavations.swish,
+            keras.activations.swish,
             PaddedConv2D(out_channels, 3, padding=1),
         ]
         self.emb_layers = [
@@ -42,7 +42,7 @@ class CrossAttention(keras.layers.Layer):
         self.to_q = keras.layers.Dense(n_heads * d_head, use_bias=False)
         self.to_k = keras.layers.Dense(n_heads * d_head, use_bias=False)
         self.to_v = keras.layers.Dense(n_heads * d_head, use_bias=False)
-        self.scale = d_head ** -0.5
+        self.scale = d_head**-0.5
         self.num_heads = n_heads
         self.head_size = d_head
         self.to_out = [keras.layers.Dense(n_heads * d_head)]
@@ -66,7 +66,9 @@ class CrossAttention(keras.layers.Layer):
         score = td_dot(q, k) * self.scale
         weights = keras.activations.softmax(score)
         attention = td_dot(weights, v)
-        attention = keras.layers.Permute((2, 1, 3))(attention)
+        attention = keras.layers.Permute((2, 1, 3))(
+            attention
+        )
         h_ = tf.reshape(attention, (-1, x.shape[1], self.num_heads * self.head_size))
         return apply_seq(h_, self.to_out)
 
@@ -86,12 +88,12 @@ class BasicTransformerBlock(keras.layers.Layer):
 
     def call(self, inputs):
         x, context = inputs
-        x = self.attn1([self.norm(x)]) + x
+        x = self.attn1([self.norm1(x)]) + x
         x = self.attn2([self.norm2(x), context]) + x
         return self.dense(self.geglu(self.norm3(x))) + x
 
 
-class SpatialTransformer(keras.layer.Layer):
+class SpatialTransformer(keras.layers.Layer):
     def __init__(self, channels, n_heads, d_head):
         super().__init__()
         self.norm = tfa.layers.GroupNormalization(epsilon=1e-5)
@@ -116,6 +118,15 @@ class SpatialTransformer(keras.layer.Layer):
 class Downsample(keras.layers.Layer):
     def __init__(self, channels):
         super().__init__()
+        self.op = PaddedConv2D(channels, 3, stride=2, padding=1)
+
+    def call(self, x):
+        return self.op(x)
+
+
+class Upsample(keras.layers.Layer):
+    def __init__(self, channels):
+        super().__init__()
         self.ups = keras.layers.UpSampling2D(size=(2, 2))
         self.conv = PaddedConv2D(channels, 3, padding=1)
 
@@ -124,7 +135,7 @@ class Downsample(keras.layers.Layer):
         return self.conv(x)
 
 
-class UNetModel(keras.model.Model):
+class UNetModel(keras.models.Model):
     def __init__(self):
         super().__init__()
         self.time_embed = [
@@ -202,7 +213,7 @@ class UNetModel(keras.model.Model):
             x = apply(x, layer)
 
         for b in self.output_blocks:
-            x = tf.concat([x, save_inputs.pop()], axis=-1)
+            x = tf.concat([x, saved_inputs.pop()], axis=-1)
             for layer in b:
                 x = apply(x, layer)
-        return apply_seq(x, self.out)
+        return apply_seq(x, self.
