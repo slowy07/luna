@@ -5,7 +5,7 @@ import tensorflow_addons as tfa
 from .layers import PaddedConv2D, apply_seq, td_dot, GEGLU
 
 
-class ResBlock(keras.layer.Layers):
+class ResBlock(keras.layers.Layers):
     def __init__(self, channels, out_channels):
         super().__init__()
         self.in_layers = [
