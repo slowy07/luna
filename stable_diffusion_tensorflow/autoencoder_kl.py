@@ -1,6 +1,7 @@
-import tensorflow
+import tensorflow as tf
 from tensorflow import keras
 import tensorflow_addons as tfa
+
 from .layers import apply_seq, PaddedConv2D
 
 
@@ -16,14 +17,17 @@ class AttentionBlock(keras.layers.Layer):
     def call(self, x):
         h_ = self.norm(x)
         q, k, v = self.q(h_), self.k(h_), self.v(h_)
+
+        # Compute attention
         b, h, w, c = q.shape
-        q = tf.reshape(q, (-1, h * w, c))
+        q = tf.reshape(q, (-1, h * w, c))  # b,hw,c
         k = keras.layers.Permute((3, 1, 2))(k)
-        k = tf.reshape(k, (-1, c, h * w))
+        k = tf.reshape(k, (-1, c, h * w))  # b,c,hw
         w_ = q @ k
         w_ = w_ * (c ** (-0.5))
         w_ = keras.activations.softmax(w_)
 
+        # Attend to values
         v = keras.layers.Permute((3, 1, 2))(v)
         v = tf.reshape(v, (-1, c, h * w))
         w_ = keras.layers.Permute((2, 1))(w_)
@@ -40,7 +44,7 @@ class ResnetBlock(keras.layers.Layer):
         self.conv1 = PaddedConv2D(out_channels, 3, padding=1)
         self.norm2 = tfa.layers.GroupNormalization(epsilon=1e-5)
         self.conv2 = PaddedConv2D(out_channels, 3, padding=1)
-        self.nin_shorcut = (
+        self.nin_shortcut = (
             PaddedConv2D(out_channels, 1)
             if in_channels != out_channels
             else lambda x: x
@@ -49,7 +53,7 @@ class ResnetBlock(keras.layers.Layer):
     def call(self, x):
         h = self.conv1(keras.activations.swish(self.norm1(x)))
         h = self.conv2(keras.activations.swish(self.norm2(h)))
-        return self.nin_shorcut(x) + h
+        return self.nin_shortcut(x) + h
 
 
 class Decoder(keras.Sequential):
