@@ -42,7 +42,7 @@ class CrossAttention(keras.layers.Layer):
         self.to_q = keras.layers.Dense(n_heads * d_head, use_bias=False)
         self.to_k = keras.layers.Dense(n_heads * d_head, use_bias=False)
         self.to_v = keras.layers.Dense(n_heads * d_head, use_bias=False)
-        self.scale = d_head ** -0.5
+        self.scale = d_head**-0.5
         self.num_heads = n_heads
         self.head_size = d_head
         self.to_out = [keras.layers.Dense(n_heads * d_head)]
@@ -59,14 +59,16 @@ class CrossAttention(keras.layers.Layer):
         k = tf.reshape(k, (-1, context.shape[1], self.num_heads, self.head_size))
         v = tf.reshape(v, (-1, context.shape[1], self.num_heads, self.head_size))
 
-        q = keras.layers.Permute((2, 1, 3))(q)
+        q = keras.layers.Permute((2, 1, 3))(q) 
         k = keras.layers.Permute((2, 3, 1))(k)
-        v = keras.layers.Permute((2, 1, 3))(v)
+        v = keras.layers.Permute((2, 1, 3))(v) 
 
         score = td_dot(q, k) * self.scale
         weights = keras.activations.softmax(score)
         attention = td_dot(weights, v)
-        attention = keras.layers.Permute((2, 1, 3))(attention)
+        attention = keras.layers.Permute((2, 1, 3))(
+            attention
+        )
         h_ = tf.reshape(attention, (-1, x.shape[1], self.num_heads * self.head_size))
         return apply_seq(h_, self.to_out)
 
@@ -171,7 +173,7 @@ class UNetModel(keras.models.Model):
                 SpatialTransformer(1280, 8, 160),
                 Upsample(1280),
             ],
-            [ResBlock(1920, 640), SpatialTransformer(640, 8, 80)],  # 6
+            [ResBlock(1920, 640), SpatialTransformer(640, 8, 80)],
             [ResBlock(1280, 640), SpatialTransformer(640, 8, 80)],
             [
                 ResBlock(960, 640),
