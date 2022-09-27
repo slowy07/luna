@@ -18,7 +18,11 @@ output:
 
 other output with change ``unconditional_guidance_scale`` to ``7.5``
 
-![astronaut_horse](.github/result_output/astronaut_horse2.png)
+![astronaut_horse2](.github/result_output/astronaut_horse2.png)
+
+![astronaut_horse3](.github/result_output/astronaut_horse3.png)
+
+![astronaut_horse4](.github/result_output/astronaut_horse4.png)
 
 ```python
 image_prompt: str = "Harry potter playing basketball"
