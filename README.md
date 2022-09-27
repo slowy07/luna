@@ -16,3 +16,14 @@ output:
 
 ![astronut_horse](.github/result_output/astronaut_horse.png)
 
+###  other output
+
+> God wearing mask
+![god_wearing_mask](./github/result_output/god_wearing_mask.png)
+
+> Harry potter random
+![harry_potter_random](./github/result_output/harry_potter_random.png)
+
+> Marilyn monroe with random  art style
+![marilyn_monroe_with_random_art_style](./github/result_output/marilyn_monroe_with_random_art_style.png)
+
