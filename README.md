@@ -16,6 +16,23 @@ output:
 
 ![astronut_horse](.github/result_output/astronaut_horse.png)
 
+other output with change ``unconditional_guidance_scale`` to ``7.5``
+
+![astronaut_horse](.github/result_output/astronaut_horse2.png)
+
+```python
+image_prompt: str = "Harry potter playing basketball"
+img = generator.generate(
+  image_prompt,
+  num_steps = 50,
+  unconditional_guidance_scale = 75,
+  temperature = 1,
+  batch_size = 1,
+)
+```
+
+![harry_potter_playing_basketball](.github/result_output/harry_potter_playing_basket.png)
+
 ###  other output
 
 > God wearing mask
