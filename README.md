@@ -87,3 +87,10 @@ img = generator.generate(
 | prompt: God wearing mask | ![god_wearing_mask](.github/result_output/god_wearing_mask.png) |
 | prompt: Harry potter random | ![harry_potter_random](.github/result_output/harry_potter_random.png) |
 | prompt: Marilyn monroe with random  art style | ![marilyn_monroe_with_random_art_style](.github/result_output/marilyn_monroe_with_random_art_style.png) |
+
+---
+
+### donate
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/arfyslowy)
+
