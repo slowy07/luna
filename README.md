@@ -1,5 +1,14 @@
 # luna
-text to image generation with stable diffusion
+![code_quality_checking](https://img.shields.io/github/workflow/status/slowy07/luna/CodeQL?label=Code%20quality%20check&style=flat-square)
+![python_post_processing](https://img.shields.io/github/workflow/status/slowy07/luna/PythonPostPorcessing?label=Python%20Post%20Processing&style=flat-square)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=flat-square&logo=TensorFlow&logoColor=white)
+
+
+Stable diffusion is a deep learning, text-to-image model and used to generate detailted images
+conditioned on text description, thout it can also be applied to other task such as inpainting or outpainting and 
+generate image to image translate guide by text prompt.
+
+**try online on google colab**: [luna](https://colab.research.google.com/drive/1IyHaYLCPLRurVs-tJJRLbCcO4kr1xlOi#scrollTo=NxKZSUwTLG-z&uniqifier=1)
 
 # usage
 ### use venv
@@ -12,10 +21,21 @@ source venv/bin/activate
 ```
 
 ### clone repo
+clone on https :
 ```
-git clone git@github.com:slowy07/luna.git
+git clone https://github.com/slowy07/luna
+cd luna
 pip install -r requirements.txt
 ```
+
+clone on ssh :
+```
+git clone git@github.com:slowy07/luna.git
+cd luna
+pip install -r requirements.txt
+```
+
+**note** : if using mac m1 you can try installing the ``requirements_m1.txt``
 
 ### run script
 ```
@@ -42,6 +62,15 @@ img = generator.generate(
   unconditional_guidance_scale = 75,
   temperature = 1,
   batch_size = 1,
+)
+```
+
+you can change dimension of image by change the ``img_height`` and ``img_width``
+
+```python
+generator = Text2Image(
+  img_height = 1020 # or change 1080
+  img_height = 1080 # or change 800
 )
 ```
 
@@ -83,7 +112,9 @@ img = generator.generate(
 
 | description | image |
 | ------ | ----- |
+| prompt: indonesia country with cyberpunk style | ![indonesia_country_with_cyberpunk_style](.github/result_output/indonesia_country_with_cyberpunk_style.png) |
 | prompt: harry potter playing basketball | ![harry_potter_playing_basketball](.github/result_output/harry_potter_playing_basket.png) |
+| prompt: harry potter playing guitar     | ![harry_potter_playing_guitar](.github/result_output/harry_potter_playing_guitar.png)     |
 | prompt: God wearing mask | ![god_wearing_mask](.github/result_output/god_wearing_mask.png) |
 | prompt: Harry potter random | ![harry_potter_random](.github/result_output/harry_potter_random.png) |
 | prompt: Marilyn monroe with random  art style | ![marilyn_monroe_with_random_art_style](.github/result_output/marilyn_monroe_with_random_art_style.png) |
