@@ -1,5 +1,7 @@
 # luna
 ![luna_banner](.github/luna_banner.png)
+_<p align="center"> This image background generated with stable diffusion luna</p>_
+
 
 ![code_quality_checking](https://img.shields.io/github/workflow/status/slowy07/luna/CodeQL?label=Code%20quality%20check&style=flat-square)
 ![python_post_processing](https://img.shields.io/github/workflow/status/slowy07/luna/PythonPostPorcessing?label=Python%20Post%20Processing&style=flat-square)
