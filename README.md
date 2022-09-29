@@ -104,7 +104,7 @@ image_prompt: str = "Harry potter playing basketball"
 img = generator.generate(
   image_prompt,
   num_steps = 50,
-  unconditional_guidance_scale = 75,
+  unconditional_guidance_scale = 5.6,
   temperature = 1,
   batch_size = 1,
 )
