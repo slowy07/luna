@@ -116,6 +116,7 @@ img = generator.generate(
 | prompt: medival castle realistic and detailed oil painting | ![medival_castle_realistic_and_detailed_oil_painting](.github/result_output/medival_castle_realistic_and_detailed_oil_painting.png) |
 | prompt: harry potter playing basketball | ![harry_potter_playing_basketball](.github/result_output/harry_potter_playing_basket.png) |
 | prompt: harry potter playing guitar     | ![harry_potter_playing_guitar](.github/result_output/harry_potter_playing_guitar.png)     |
+| prompt: person hacking with computer    | ![person_hacking_with_computer](.github/result_output/person_hacking_with_computer.png) |
 | prompt: God wearing mask | ![god_wearing_mask](.github/result_output/god_wearing_mask.png) |
 | prompt: Harry potter random | ![harry_potter_random](.github/result_output/harry_potter_random.png) |
 | prompt: Marilyn monroe with random  art style | ![marilyn_monroe_with_random_art_style](.github/result_output/marilyn_monroe_with_random_art_style.png) |
