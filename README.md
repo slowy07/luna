@@ -1,4 +1,8 @@
 # luna
+![luna_banner](.github/luna_banner.png)
+_<p align="center"> This image background generated with stable diffusion luna</p>_
+
+
 ![code_quality_checking](https://img.shields.io/github/workflow/status/slowy07/luna/CodeQL?label=Code%20quality%20check&style=flat-square)
 ![python_post_processing](https://img.shields.io/github/workflow/status/slowy07/luna/PythonPostPorcessing?label=Python%20Post%20Processing&style=flat-square)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=flat-square&logo=TensorFlow&logoColor=white)
@@ -20,9 +24,13 @@ luna can running on online colab notebook you can check here:
 **usage for online colab**:
 
 - click the connect
-  ![connect](./github/connect.png)
+
+  ![connect](.github/connect.png)
+
 - open on ``runtime`` and click run all ( ``ctrl+f9`` if using shortcut )
-  ![running](./github/running.png)
+  
+  ![running](.github/running.png)
+
 - online collab running luna
 
 
