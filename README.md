@@ -8,7 +8,24 @@ Stable diffusion is a deep learning, text-to-image model and used to generate de
 conditioned on text description, thout it can also be applied to other task such as inpainting or outpainting and 
 generate image to image translate guide by text prompt.
 
-**try online on google colab**: [luna](https://colab.research.google.com/drive/1IyHaYLCPLRurVs-tJJRLbCcO4kr1xlOi#scrollTo=NxKZSUwTLG-z&uniqifier=1)
+**try online on google colab**: 
+
+luna can running on online colab notebook you can check here:
+
+- [luna](https://colab.research.google.com/drive/1IyHaYLCPLRurVs-tJJRLbCcO4kr1xlOi?usp=sharing)
+- [luna with gpu and mixed precision](https://colab.research.google.com/drive/1ydFWPt6BgPT7i4VmZcs8ttGaFu7dw-cV?usp=sharing) 
+  - 15 seconds generation time per image (512 x 512) on default colab GPU without drop the quality
+
+
+**usage for online colab**:
+
+- click the connect
+  ![connect](./github/connect.png)
+- open on ``runtime`` and click run all ( ``ctrl+f9`` if using shortcut )
+  ![running](./github/running.png)
+- online collab running luna
+
+
 
 # usage
 ### use venv
