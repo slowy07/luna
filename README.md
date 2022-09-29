@@ -138,6 +138,12 @@ img = generator.generate(
 | description | image |
 | ------ | ----- |
 | prompt: indonesia country with cyberpunk style | ![indonesia_country_with_cyberpunk_style](.github/result_output/indonesia_country_with_cyberpunk_style.png) |
+| prompt: 3d detailed woman knight | ![3d_woman_knight](.github/result_output/3d_woman_knight.png)
+| prompt: 3d detailed woman knight (next generation process) | ![3d_woman_knight2](.github/result_output/3d_woman_knight2.png) |
+| prompt: 3d detailed woman knight (next generation process) | ![3d_woman_knight3](.github/result_output/3d_woman_knight3.png) |
+| prompt: 3d detailed woman knight (next generation process) | ![3d_woman_knight4](.github/result_output/3d_woman_knight4.png) |
+| prompt: realistic detailed knight | ![realistic_detailed_knight](.github/result_output/realistic_detailed_knight.png) |
+| prompt: aesthetic art haunted house | ![aesthetic_art_haunted_house](.github/result_output/aesthetic_art_haunted_house.png) |
 | prompt: medival castle realistic and detailed oil painting | ![medival_castle_realistic_and_detailed_oil_painting](.github/result_output/medival_castle_realistic_and_detailed_oil_painting.png) |
 | prompt: harry potter playing basketball | ![harry_potter_playing_basketball](.github/result_output/harry_potter_playing_basket.png) |
 | prompt: harry potter playing guitar     | ![harry_potter_playing_guitar](.github/result_output/harry_potter_playing_guitar.png)     |
