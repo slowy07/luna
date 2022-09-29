@@ -113,6 +113,7 @@ img = generator.generate(
 | description | image |
 | ------ | ----- |
 | prompt: indonesia country with cyberpunk style | ![indonesia_country_with_cyberpunk_style](.github/result_output/indonesia_country_with_cyberpunk_style.png) |
+| prompt: medival castle realistic and detailed oil painting | ![medival_castle_realistic_and_detailed_oil_painting](.github/result_output/medival_castle_realistic_and_detailed_oil_painting.png) |
 | prompt: harry potter playing basketball | ![harry_potter_playing_basketball](.github/result_output/harry_potter_playing_basket.png) |
 | prompt: harry potter playing guitar     | ![harry_potter_playing_guitar](.github/result_output/harry_potter_playing_guitar.png)     |
 | prompt: God wearing mask | ![god_wearing_mask](.github/result_output/god_wearing_mask.png) |
