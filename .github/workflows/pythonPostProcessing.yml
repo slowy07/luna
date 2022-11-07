@@ -30,5 +30,5 @@ jobs:
         
       # runs the codespell (list all the typos)
       - name: run codespell
-        run: codespell -L slowy,Ue,Nd,OnS,bu,Bu,oT,ot,UE
+        run: codespell -L slowy,Ue,Nd,OnS,bu,Bu,oT,ot,UE --skip="*.yml" --skip=".git"
         shell: bash
