@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Arfy"
+  given-names: "Slowy"
+title: "Stable diffusion tensorflow"
+version: 1.0.0
+date-released: 2022-11-09
+url: "https://github.com/slowy07/luna"
