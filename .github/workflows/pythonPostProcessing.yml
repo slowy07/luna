@@ -21,12 +21,15 @@ jobs:
         with:
           python-version: '3.9'
           cache: 'pip' 
-      - run: pip install black codespell
+      - run: pip install black codespell flake8
           
       # runs the black formarter (format python code)
       - name: run black
         run: black ./
         shell: bash
+
+      - name: run flake8 lint
+        run: flake8 .
         
       # runs the codespell (list all the typos)
       - name: run codespell
