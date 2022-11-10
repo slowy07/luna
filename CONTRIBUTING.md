@@ -74,11 +74,11 @@ if you encountered an issue when running pip, try running pip with higher privil
 ## panduan kontribusi
 * every changes that you proposed need to
 * use `snake_case` when naming a file
-* every tutorial or implemenation need to be in the same folder, like so:
+* every tutorial or implementation need to be in the same folder, like so:
 
 ```
 count_variable
-├── README.md (describtion)
+├── README.md (description)
 ├── countvariable.py
 ```
 
@@ -106,7 +106,7 @@ and make sure to add these prefixes on your commit message
 note: make sure the message included in the commit message are summarized, like so
 
 - ❌ feat: test_x.py
-- ✅ feat: added a unittest for alorithm x
+- ✅ feat: added a unittest for algorithm x
 
 click here for more information regarding this
 - [EN](https://www.conventionalcommits.org/en/v1.0.0/)
@@ -119,4 +119,4 @@ pull request will be merge IF:
 additional:
 - if you encountered an issue on a pull request, you can report it via [*issue*](https://github.com/slowy07/luna/issues)
 - and if you failed our test, we will re-evaluate your changes
-- for pull request it is advisable to be polite and nice to other, because thats how one programmer should act to another
+- for pull request it is advisable to be polite and nice to other, because that's how one programmer should act to another
