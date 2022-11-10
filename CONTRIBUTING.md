@@ -5,7 +5,7 @@
 Lets contribute !!!
 
 but before you start contributing here are some rules and guide you need to follow
-* we only accept original code that you made, any code that has a simularity to any online sources wont be merge !
+* we only accept original code that you made, any code that has a simularity to any online sources won't be merge !
 * your work will be licensed as [MIT](LICENSE) after merge
 * follow style and code conventions that has been provided
 <!-- * we only accept file with `*.py` extension -->
