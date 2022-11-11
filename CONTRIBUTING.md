@@ -7,10 +7,10 @@ Lets contribute !!!
 but before you start contributing here are some rules and guide you need to follow
 * we only accept original code that you made, any code that has a simularity to any online sources won't be merge !
 * your work will be licensed as [MIT](LICENSE) after merge
-* follow style and code conventions that has been provided
+* follow style and code conventions that we have provided in the guideline
 <!-- * we only accept file with `*.py` extension -->
 
-## installasi
+## installation
 
 ### use venv (optional)
 create and activate new virtual environment
@@ -34,7 +34,7 @@ then open the folder and install all the dependencies
 cd luna
 pip install -r requirements.txt
 ```
-**note** : if your are using mac m1 try using the `requirements_m1.txt` instead
+**note** : if your are using mac m1 and encounter an error, try using the `requirements_m1.txt` instead
 
 and run the script
 ```bash
@@ -71,8 +71,8 @@ generator = Text2Image(
 ### ⚠️NOTE⚠️
 if you encountered an issue when running pip, try running pip with higher privilege using sudo
 
-## panduan kontribusi
-* every changes that you proposed need to
+## contribution guideline
+* any changes that you made need to output such that
 * use `snake_case` when naming a file
 * every tutorial or implementation need to be in the same folder, like so:
 
@@ -85,10 +85,10 @@ count_variable
 ## Pull Request
 to avoid conflict with other pull request, use [*issue*](https://github.com/slowy07/luna/issues) when adding or modifying a file
 
-* explain to us what you want to change or add in detail, in the [*issue*](https://github.com/slowy07/luna/issues) page
-* after you explain to us what changes you are proposing in the [*issue*](https://github.com/slowy07/luna/issues), then you can create a fork of our repository
-* after creating the fork, you are free to add the proposed changes in the fork
-* after you are finish, make sure to create a new local branch, then commit the changes like so: 
+* explain to us in the [*issue*](https://github.com/slowy07/luna/issues) what you want to change or add in detail
+* after you explain to us what changes you want to make in the [*issue*](https://github.com/slowy07/luna/issues), then you can create your own fork of our repository
+* after creating your own fork of the repo, feel free to add or change    you are free to add and modify the proposed changes in the fork
+* after you are finish, make sure to create a new local branch, and then commit the changes like so: 
 ``` 
 git checkout -b <branch_name>
 git add . # atau git add nama_perubahan_kamu.py
@@ -103,7 +103,7 @@ and make sure to add these prefixes on your commit message
 * `docs:` when you change or create a documentation;
 * `add:` when you add an algorithm or other stuff;
 
-note: make sure the message included in the commit message are summarized, like so
+note: make sure the message included in the commit message is summarized, like so
 
 - ❌ feat: test_x.py
 - ✅ feat: added a unittest for algorithm x
@@ -112,11 +112,11 @@ click here for more information regarding this
 - [EN](https://www.conventionalcommits.org/en/v1.0.0/)
 - [ID](https://www.conventionalcommits.org/id/v1.0.0/)
 
-pull request will be merge IF:
+pull request will be merge IF!:
 - it follows the `CONTRIBUTING.md` guidelines
-- passed the provided test
+- it passed the test that we have provided
 
 additional:
 - if you encountered an issue on a pull request, you can report it via [*issue*](https://github.com/slowy07/luna/issues)
 - and if you failed our test, we will re-evaluate your changes
-- for pull request it is advisable to be polite and nice to other, because that's how one programmer should act to another
+- for pull request it is advisable to be polite and nice to other, because that's how programmer should behafe from one to another
