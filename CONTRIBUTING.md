@@ -122,7 +122,7 @@ note: make sure the message included in the commit message is summarized, like s
 
 #### breaking changes!
 if you made a breaking changes, make sure to add `BREAKING CHANGE:` in the footer,\
-or append ! (exclamation mark) infront of preffix like so `!feat: new encoding`
+or append ! (exclamation mark) infront of prefix like so `!feat: new encoding`
 
 click [here](https://www.conventionalcommits.org/en/v1.0.0/) for more information regarding commit
 
