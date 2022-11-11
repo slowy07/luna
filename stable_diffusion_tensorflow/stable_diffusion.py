@@ -256,7 +256,7 @@ def get_models(img_height, img_width, download_weights=True):
 
     inp_img = keras.layers.Input((img_height, img_width, 3))
     encoder = Encoder()
-    encoder = keras.models.Module(inp_img, encoder(inp_img))
+    encoder = keras.models.Model(inp_img, encoder(inp_img))
 
     text_encoder_weights_fpath = keras.utils.get_file(
         origin="https://huggingface.co/fchollet/stable-diffusion/resolve/main/text_encoder.h5",

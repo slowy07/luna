@@ -61,7 +61,7 @@ parser.add_argument(
 args = parser.parse_args()
 if args.mp:
     print("Using mixed precision")
-    keras.mixed_precision.set_global_policy("mixed_floats16")
+    keras.mixed_precision.set_global_policy("mixed_float16")
 
 generator = Text2Image(img_height=args.H, img_width=args.W, jit_compile=False)
 img = generator.generate(
