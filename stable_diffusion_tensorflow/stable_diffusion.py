@@ -5,38 +5,54 @@ import math
 import tensorflow as tf
 from tensorflow import keras
 
-from .autoencoder_kl import Decoder
+from .autoencoder_kl import Decoder, Encoder
 from .diffusion_model import UNetModel
 from .clip_encoder import CLIPTextTransformer
 from .clip_tokenizer import SimpleTokenizer
-from .constants import _UNCONDITIONAL_TOKENS, _ALPHAS_CUMPROD
+from .constants import _UNCONDITIONAL_TOKENS, _ALPHAS_CUMPROD, PYTORCH_CKPT_MAPPING
+from PIL import Image
 
 MAX_TEXT_LEN = 77
 
 
-class Text2Image:
-    def __init__(self, img_height=1000, img_width=1000, jit_compile=False):
-        self.img_height = round(img_height/128) * 128
-        self.img_width = round(img_width/128) * 128
+class StableDiffusion:
+    def __init__(
+        self, img_height=1000, img_width=1000, jit_compile=False, download_weights=True
+    ):
+        self.img_height = img_height
+        self.img_width = img_width
         self.tokenizer = SimpleTokenizer()
 
-        text_encoder, diffusion_model, decoder = get_models(self.img_height, self.img_width)
+        text_encoder, diffusion_model, decoder, encoder = get_models(
+            img_height, img_width, download_weights=download_weights
+        )
         self.text_encoder = text_encoder
         self.diffusion_model = diffusion_model
         self.decoder = decoder
+        self.encoder = encoder
+
         if jit_compile:
             self.text_encoder.compile(jit_compile=True)
             self.diffusion_model.compile(jit_compile=True)
             self.decoder.compile(jit_compile=True)
+            self.encoder.compile(jit_compile=True)
+
+        self.dtype = tf.float32
+        if tf.keras.mixed_precision.global_policy().name == "mixed_float16":
+            self.dtype = tf.float16
 
     def generate(
         self,
         prompt,
+        negative_prompt=None,
         batch_size=1,
         num_steps=25,
         unconditional_guidance_scale=7.5,
         temperature=1,
         seed=None,
+        input_image=None,
+        input_mask=None,
+        input_image_strength=0.5,
     ):
         inputs = self.tokenizer.encode(prompt)
         assert len(inputs) < 77, "Prompt is too long (should be < 77 tokens)"
@@ -48,16 +64,57 @@ class Text2Image:
         pos_ids = np.repeat(pos_ids, batch_size, axis=0)
         context = self.text_encoder.predict_on_batch([phrase, pos_ids])
 
-        unconditional_tokens = np.array(_UNCONDITIONAL_TOKENS)[None].astype("int32")
+        input_image_tensor = None
+        if input_image is not None:
+            if type(input_image) is str:
+                input_image = Image.open(input_image)
+                input_image = input_image.resize(self.image_width, self.img_height)
+            elif type(input_image) is np.ndarray:
+                input_image = np.resize(
+                    input_image, (self.img_height, self.img_width, input_image.shape[2])
+                )
+
+            input_image_array = np.array(input_image, dtype=np.float32)[None, ..., :3]
+            input_image_tensor = tf.cast(
+                (input_image_array / 255.0) * 2 - 1, self.dtype
+            )
+
+        if type(input_mask) is str:
+            input_mask = Image.open(input_mask)
+            input_mask = input_mask.resize((self.img_width, self.img_height))
+            input_mask_array = np.array(input_mask, dtype=np.float32)[None, ..., None]
+            input_mask_array = input_mask_array / 255.0
+
+            latent_mask = input_mask.resize((self.img_width // 8, self.img_height // 8))
+            latent_mask = np.array(latent_mask, dtype=np.float32)[None, ..., None]
+            latent_mask = 1 - (latent_mask.astype("float") / 255.0)
+            latent_mask_tensor = tf.cast(
+                tf.repeat(latent_mask, batch_size, axis=0), self.dtype
+            )
+
+        unconditional_tokens = _UNCONDITIONAL_TOKENS
+        if negative_prompt is not None:
+            inputs = self.tokenizer.encode(negative_prompt)
+            assert len(inputs) < 77, "Negative prompt too long (should be < 77 tokens)"
+            unconditional_tokens = inputs + [49407] * (77 - len(inputs))
+
+        unconditional_tokens = np.array(unconditional_tokens)[None].astype("int32")
         unconditional_tokens = np.repeat(unconditional_tokens, batch_size, axis=0)
-        self.unconditional_tokens = tf.convert_to_tensor(unconditional_tokens)
         unconditional_context = self.text_encoder.predict_on_batch(
-            [self.unconditional_tokens, pos_ids]
+            [unconditional_tokens, pos_ids]
         )
         timesteps = np.arange(1, 1000, 1000 // num_steps)
+        input_img_noise_t = timesteps[int(len(timesteps) * input_image_strength)]
         latent, alphas, alphas_prev = self.get_starting_parameters(
-            timesteps, batch_size, seed
+            timesteps,
+            batch_size,
+            seed,
+            input_image=input_image_tensor,
+            input_img_noise_t=input_img_noise_t,
         )
+
+        if input_image is not None:
+            timesteps = timesteps[: int(len(timesteps) * input_image_strength)]
 
         progbar = tqdm(list(enumerate(timesteps))[::-1])
         for index, timestep in progbar:
@@ -75,8 +132,27 @@ class Text2Image:
                 latent, e_t, index, a_t, a_prev, temperature, seed
             )
 
+            if input_mask is not None and input_image is not None:
+                latent_origin, alphas, alphas_prev = self.get_starting_parameters(
+                    timesteps,
+                    batch_size,
+                    seed,
+                    input_image=input_image_tensor,
+                    input_img_noise_t=timestep,
+                )
+                latent = latent_origin * latent_mask_tensor + latent * (
+                    1 - latent_mask_tensor
+                )
+
         decoded = self.decoder.predict_on_batch(latent)
         decoded = ((decoded + 1) / 2) * 255
+
+        if input_mask is not None:
+            decoded = (
+                input_image_array * (1 - input_mask_array)
+                + np.array(decoded) * input_mask_array
+            )
+
         return np.clip(decoded, 0, 255).astype("uint8")
 
     def timestep_embedding(self, timesteps, dim=320, max_period=10000):
@@ -96,6 +172,21 @@ class Text2Image:
         sqrt_one_minus_alpha_prod = (1 - _ALPHAS_CUMPROD[t]) ** 0.5
 
         return sqrt_alpha_prod * x + sqrt_one_minus_alpha_prod * noise
+
+    def get_starting_parameters(
+        self, timesteps, batch_size, seed, input_image=None, input_img_noise_t=None
+    ):
+        n_h = self.img_height // 8
+        n_w = self.img_width // 8
+        alphas = [_ALPHAS_CUMPROD[t] for t in timesteps]
+        alphas_prev = [1.0] + alphas[:-1]
+        if input_image is None:
+            latent = tf.random.normal((batch_size, n_h, n_w, 4), seed=seed)
+        else:
+            latent = self.encoder(input_image)
+            latent = tf.repeat(latent, batch_size, axis=0)
+            latent = self.add_noise(latent, input_img_noise_t)
+        return latent, alphas, alphas_prev
 
     def get_model_output(
         self,
@@ -122,18 +213,24 @@ class Text2Image:
         sqrt_one_minus_at = math.sqrt(1 - a_t)
         pred_x0 = (x - sqrt_one_minus_at * e_t) / math.sqrt(a_t)
 
-        dir_xt = math.sqrt(1.0 - a_prev - sigma_t**2) * e_t
+        dir_xt = math.sqrt(1.0 - a_prev - sigma_t ** 2) * e_t
         noise = sigma_t * tf.random.normal(x.shape, seed=seed) * temperature
         x_prev = math.sqrt(a_prev) * pred_x0 + dir_xt
         return x_prev, pred_x0
 
-    def get_starting_parameters(self, timesteps, batch_size, seed):
-        n_h = self.img_height // 8
-        n_w = self.img_width // 8
-        alphas = [_ALPHAS_CUMPROD[t] for t in timesteps]
-        alphas_prev = [1.0] + alphas[:-1]
-        latent = tf.random.normal((batch_size, n_h, n_w, 4), seed=seed)
-        return latent, alphas, alphas_prev
+    def get_load_weights_from_pytorch_ckpt(self, pytorch_ckpt_path):
+        import torch
+
+        pt_weights = torch.load(pytorch_ckpt_path, map_location="cpu")
+        for module_name in ["text_decoder", "diffusion_model", "decoder", "encoder"]:
+            module_weights = []
+            for i, (key, perm) in enumerate(PYTORCH_CKPT_MAPPING[module_name]):
+                w = pt_weights["state_dict"][key].numpy()
+                if perm is not None:
+                    w = np.transpose(w, perm)
+                module_weights.append(w)
+            getattr(self, module_name).set_weights(module_weights)
+            print("loaded %d weight for %s" % (len(module_weights), module_name))
 
 
 def get_models(img_height, img_width, download_weights=True):
@@ -156,6 +253,10 @@ def get_models(img_height, img_width, download_weights=True):
     latent = keras.layers.Input((n_h, n_w, 4))
     decoder = Decoder()
     decoder = keras.models.Model(latent, decoder(latent))
+
+    inp_img = keras.layers.Input((img_height, img_width, 3))
+    encoder = Encoder()
+    encoder = keras.models.Module(inp_img, encoder(inp_img))
 
     text_encoder_weights_fpath = keras.utils.get_file(
         origin="https://huggingface.co/fchollet/stable-diffusion/resolve/main/text_encoder.h5",

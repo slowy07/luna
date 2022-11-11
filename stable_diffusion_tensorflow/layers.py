@@ -28,7 +28,7 @@ class GEGLU(keras.layers.Layer):
 
 
 def gelu(x):
-    tanh_res = keras.activations.tanh(x * 0.7978845608 * (1 + 0.044715 * (x**2)))
+    tanh_res = keras.activations.tanh(x * 0.7978845608 * (1 + 0.044715 * (x ** 2)))
     return 0.5 * x * (1 + tanh_res)
 
 
