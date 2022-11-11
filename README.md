@@ -82,7 +82,7 @@ from stable_diffusion_tensorflow.stable_diffusion import Text2Image
 
 generator = Text2Image(img_height=512, img_width=512, jit_compose=False)
 img = generator.generate(
-  "DSLR photograph of an astronut ridinga horse",
+  "DSLR photograph of an astronut riding a horse",
   num_steps = 50,
   unconditional_guidance_scale = 75,
   temperature = 1,
@@ -106,7 +106,7 @@ if pip encountered an issue, try running pip with higher privilege using `sudo`
 
 ```python
 img = generator.generate(
-  "DSLR photograph of an astronut ridinga horse",
+  "DSLR photograph of an astronut riding a horse",
   num_steps = 50,
   unconditional_guidance_scale = 75,
   temperature = 1,
@@ -117,10 +117,10 @@ output:
 
 | description | image |
 | ------ | ----- |
-| prompt: DSLR photograph of an astronut ridinga horse | ![astronut_horse](.github/result_output/astronaut_horse.png) |
-| prompt: DSLR photograph of an astronut ridinga horse with unconditional_guidance_scale 7.5 | ![astronaut_horse2](.github/result_output/astronaut_horse2.png) |
-| prompt: DSLR photograph of an astronut ridinga horse with unconditional_guidance_scale 7.5 | ![astronaut_horse3](.github/result_output/astronaut_horse3.png) |
-| prompt: DSLR photograph of an astronut ridinga horse with unconditional_guidance_scale 7.5 | ![astronaut_horse4](.github/result_output/astronaut_horse4.png) |
+| prompt: DSLR photograph of an astronut riding a horse | ![astronut_horse](.github/result_output/astronaut_horse.png) |
+| prompt: DSLR photograph of an astronut riding a horse with unconditional_guidance_scale 7.5 | ![astronaut_horse2](.github/result_output/astronaut_horse2.png) |
+| prompt: DSLR photograph of an astronut riding a horse with unconditional_guidance_scale 7.5 | ![astronaut_horse3](.github/result_output/astronaut_horse3.png) |
+| prompt: DSLR photograph of an astronut riding a horse with unconditional_guidance_scale 7.5 | ![astronaut_horse4](.github/result_output/astronaut_horse4.png) |
 
 ###  other output
 
