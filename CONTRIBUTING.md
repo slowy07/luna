@@ -59,7 +59,7 @@ to avoid conflict with other pull request, use [*issue*](https://github.com/slow
 ``` 
 git checkout -b <branch_name>
 git add . 
-git commit -m "feat: adding new feature on luna wich can ..."
+git commit -m "feat: adding new feature on luna which can ..."
 ```
 * push the changes you made to the new branch, then open a pull request to our repo
 
