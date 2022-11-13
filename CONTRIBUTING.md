@@ -29,58 +29,25 @@ or
 ```bash
  git clone git@github.com:slowy07/luna.git
 ```
-then open the folder and install all the dependencies
-```bash
-cd luna
-pip install -r requirements.txt
-```
-**note** : if your are using mac m1 and encounter an error, try using the `requirements_m1.txt` instead
 
-and run the script
-```bash
-python text2image.py --prompt="example text"
-# if you want to change the output file you can use the `--output` flag, and add the new filename like so
-python text2image.py --prompt="cool picture" --output="cool_pic.png"
-```
+testing with flake8 by
 
-### install as python package
-or install it as python package
-```bash
-pip install git+https://github.com/slowy07/luna
-```
-then create a script like so
-```py
-from stable_diffusion_tensorflow.stable_diffusion import Text2Image
+- install flake8
+  ```
+  pip install flake8
+  ```
+- running flake8
+  ```
+  flake8
+  ```
 
-generator = Text2Image(img_height=512, img_width=512, jit_compose=False)
-img = generator.generate(
-  "DSLR photograph of an astronut ridinga horse",
-  num_steps = 50,
-  unconditional_guidance_scale = 75,
-  temperature = 1,
-  batch_size = 1,
-)
-```
-you can also change the dimension of the generated image like so
-```py
-generator = Text2Image(
-  img_height = 1020 # or change 1080
-  img_height = 1080 # or change 800
-)
-```
+
 ### ⚠️NOTE⚠️
 if you encountered an issue when running pip, try running pip with higher privilege using sudo
 
 ## contribution guideline
 * any changes that you made need to output such that
 * use `snake_case` when naming a file
-* every tutorial or implementation need to be in the same folder, like so:
-
-```
-count_variable
-├── README.md (description)
-├── countvariable.py
-```
 
 ## Pull Request
 to avoid conflict with other pull request, use [*issue*](https://github.com/slowy07/luna/issues) when adding or modifying a file
@@ -91,8 +58,8 @@ to avoid conflict with other pull request, use [*issue*](https://github.com/slow
 * after you are finish, make sure to create a new local branch, and then commit the changes like so: 
 ``` 
 git checkout -b <branch_name>
-git add . # atau git add nama_perubahan_kamu.py
-git commit -m "feat: menambahkan tutorial terbaru"
+git add . 
+git commit -m "feat: adding new feature on luna wich can ..."
 ```
 * push the changes you made to the new branch, then open a pull request to our repo
 
@@ -118,7 +85,7 @@ and make sure to add these prefixes on your commit message
 note: make sure the message included in the commit message is summarized, like so
 
 - ❌ feat: test_x.py
-- ✅ feat: added a unittest for algorithm x
+- ✅ feat: adding changes for ``file.py`` and create some change on ...
 
 #### breaking changes!
 if you made a breaking changes, make sure to add `BREAKING CHANGE:` in the footer,\
