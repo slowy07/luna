@@ -97,7 +97,7 @@ class SimpleTokenizer(object):
         """
         the unknown token a token that is not in the vocabulary
         cannot be converted to an ID and is set to be
-        this toke instead
+        this token instead
         """
         if token in self.cache:
             return self.cache[token]
