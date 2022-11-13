@@ -65,6 +65,12 @@ def whitespace_clean(text):
 
 class SimpleTokenizer(object):
     def __init__(self, bpe_path: str = default_bpe()):
+        """
+        construct clip tokenizer : based on byte-level-pair encoding
+
+        parameter: bpe_path
+                    path to vocabulary file.
+        """
         self.byte_encoder = bytes_to_unicode()
         self.byte_decoder = {v: k for k, v in self.byte_encoder.items()}
         merges = gzip.open(bpe_path).read().decode("utf-8").split("\n")
@@ -88,6 +94,11 @@ class SimpleTokenizer(object):
         )
 
     def bpe(self, token):
+        """
+        the unknown token a token that is not in the vocabulary
+        cannot be converted to an ID and is set to be
+        this token instead
+        """
         if token in self.cache:
             return self.cache[token]
         word = tuple(token[:-1]) + (token[-1] + "</w>",)
