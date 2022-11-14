@@ -38,8 +38,10 @@ testing with flake8 by
   ```
 - running flake8
   ```
-  flake8
+  flake8 .
   ```
+
+> are flake8 configuration cannot be changed 
 
 
 ### ⚠️NOTE⚠️
@@ -64,24 +66,13 @@ git commit -m "feat: adding new feature on luna which can ..."
 * push the changes you made to the new branch, then open a pull request to our repo
 
 ### commit message
-<!-- in case we need commit message structure -->
-<!-- 
-here is the structure for our commit message:  
-```
-<type>[optional scope]: <description>
-[optional body]
-[optional footer(s)] 
-```
--->
 
-<!-- #### type -->
 and make sure to add these prefixes on your commit message
 * `feat:` when you add a new algorithm;
 * `fix:` when you changed or fixed an already existing algorithm;
 * `docs:` when you change or create a documentation;
 * `add:` when you add an algorithm or other stuff;
 
-<!-- #### description -->
 note: make sure the message included in the commit message is summarized, like so
 
 - ❌ feat: test_x.py
@@ -93,10 +84,6 @@ or append ! (exclamation mark) infront of prefix like so `!feat: new encoding`
 
 click [here](https://www.conventionalcommits.org/en/v1.0.0/) for more information regarding commit
 
-<!-- #### scope -->
-<!-- 
-to add a scope, add a brace with scope within those bracket after the prefix, like so `feat(img2img):`
--->
 
 pull request will only be merge IF:
 - it follows the `CONTRIBUTING.md` guidelines
