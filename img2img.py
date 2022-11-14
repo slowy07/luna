@@ -5,32 +5,6 @@ from PIL import Image
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    "--prompt",
-    type=str,
-    nargs="?",
-    required=True,
-    help="the prompt to render",
-)
-
-parser.add_argument(
-    "--negative-prompt",
-    type=str,
-    help="the negative prompt to use (if any)",
-)
-
-parser.add_argument(
-    "--steps", type=int, default=50, help="number of ddim sampling steps"
-)
-
-parser.add_argument(
-    "--input",
-    type=str,
-    nargs="?",
-    required=True,
-    help="the input image filename",
-)
-
-parser.add_argument(
     "--output",
     type=str,
     nargs="?",
