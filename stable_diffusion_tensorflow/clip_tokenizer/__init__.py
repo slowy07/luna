@@ -20,12 +20,21 @@ def default_bpe():
     else:
         return keras.utils.get_file(
             "bpe_simple_vocab_16e6.txt.gz",
-            "https://github.com/openai/CLIP/blob/main/clip/bpe_simple_vocab_16e6.txt.gz?raw=true",
+            "https://github.com/slowy07/luna/blob/main/stable_diffusion_tensorflow/clip_tokenizer/bpe_simple_vocab_16e6.txt.gz?raw=true",
         )
 
 
 @lru_cache()
 def bytes_to_unicode():
+    """
+    return list of utf-8 byte and a correspoinding list of unicode string
+    the revesible bpe codes work on unicode strings
+    this means need a large of unicode character in yout vocab if you want to avoid
+    UNKs, when we're at something like a 10B token dataset, we end up needing around 5K
+    for decent coverage. this is a significant percentage of normal, say, 32K bpe vocab
+    to aboid that, we eant lookup tables between utf-8 byte and unicode strings
+    and avoid mapping to whitespace/control characters the bpe code barfs on
+    """
     bs = (
         list(range(ord("!"), ord("~") + 1))
         + list(range(ord("¡"), ord("¬") + 1))
@@ -43,6 +52,11 @@ def bytes_to_unicode():
 
 
 def get_pairs(word):
+    """
+    return set of symbol pairs in a ord
+    word is repersent as tuple of symbol
+    (symbol being variable-length of strings)
+    """
     pairs = set()
     prev_char = word[0]
     for char in word[1:]:
