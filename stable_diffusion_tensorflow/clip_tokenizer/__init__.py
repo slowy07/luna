@@ -27,7 +27,7 @@ def default_bpe():
 @lru_cache()
 def bytes_to_unicode():
     """
-    return list of utf-8 byte and a correspoinding list of unicode string
+    return list of utf-8 byte and a corresponding list of unicode string
     the revesible bpe codes work on unicode strings
     this means need a large of unicode character in yout vocab if you want to avoid
     UNKs, when we're at something like a 10B token dataset, we end up needing around 5K
