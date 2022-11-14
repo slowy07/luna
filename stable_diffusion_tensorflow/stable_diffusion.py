@@ -260,7 +260,7 @@ def get_models(img_height, img_width, download_weights=True):
 
     if download_weights:
         text_encoder_weights_fpath = keras.utils.get_file(
-            origin="a5b2eea58365b18b40caee689a2e5d00f4c31dbcb4e1d58a9cf1071f55bbbd3a",
+            origin="https://huggingface.co/slowy07/stable_diffusion/resolve/main/text_encoder.h5",
             file_hash="d7805118aeb156fc1d39e38a9a082b05501e2af8c8fbdc1753c9cb85212d6619",
         )
         diffusion_model_weights_fpath = keras.utils.get_file(
