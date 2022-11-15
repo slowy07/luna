@@ -201,7 +201,7 @@ with block:
 
         with gr.Row(elem_id="advanced-options"):
             scale = gr.Slider(
-                lavel="Guidance scale", mininum=0, maximum=50, value=7.5, steps=0.1
+                level="Guidance scale", minimum=0, maximum=50, value=7.5, steps=0.1
             )
         ex = gr.Examples(
             examples=examples,
