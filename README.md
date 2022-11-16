@@ -110,8 +110,6 @@ if pip encountered an issue, try running pip with higher privilege using `sudo`
 | natural cave wall, dynamic light, mist low over ground, illustration by josan gonzales and moebius, studio muti, malika favre, rhads, makoto, clean thick line, comics style | ![natural_cave](.github/result_output/natural_cave.png) |
 | A beautiful ultradetailed anime illustration of a city street, trending on artstation | ![anime_street_ilustration](.github/result_output/anime_street_ilustration.png) |
 
-###  other output
-
 ---
 
 ### donate
