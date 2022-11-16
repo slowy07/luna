@@ -78,9 +78,9 @@ pip install git+https://github.com/slowy07/luna
 ```
 and run the package using
 ```python
-from stable_diffusion_tensorflow.stable_diffusion import Text2Image
+from stable_diffusion_tensorflow.stable_diffusion import StableDiffusion
 
-generator = Text2Image(img_height=512, img_width=512, jit_compose=False)
+generator = StableDiffusion(img_height=512, img_width=512, jit_compose=False)
 img = generator.generate(
   "DSLR photograph of an astronut riding a horse",
   num_steps = 50,
@@ -93,7 +93,7 @@ img = generator.generate(
 you can change dimension of image by change the ``img_height`` and ``img_width``
 
 ```python
-generator = Text2Image(
+generator = StableDiffusion(
   img_height = 1020 # or change 1080
   img_height = 1080 # or change 800
 )
@@ -102,55 +102,15 @@ generator = Text2Image(
 ### ⚠️ NOTE ⚠️
 if pip encountered an issue, try running pip with higher privilege using `sudo`
 
-# output
+# examples
 
-```python
-img = generator.generate(
-  "DSLR photograph of an astronut riding a horse",
-  num_steps = 50,
-  unconditional_guidance_scale = 75,
-  temperature = 1,
-  batch_size = 1,
-)
-```
-output:
-
-| description | image |
+| prompt | image |
 | ------ | ----- |
-| prompt: DSLR photograph of an astronut riding a horse | ![astronut_horse](.github/result_output/astronaut_horse.png) |
-| prompt: DSLR photograph of an astronut riding a horse with unconditional_guidance_scale 7.5 | ![astronaut_horse2](.github/result_output/astronaut_horse2.png) |
-| prompt: DSLR photograph of an astronut riding a horse with unconditional_guidance_scale 7.5 | ![astronaut_horse3](.github/result_output/astronaut_horse3.png) |
-| prompt: DSLR photograph of an astronut riding a horse with unconditional_guidance_scale 7.5 | ![astronaut_horse4](.github/result_output/astronaut_horse4.png) |
+| minimalist house with family, mountainous forested wild, concept art illustration | ![minimalistic_house](.github/result_output/minimalist_house_with_family_mountainous_forested_wild_concept_art_illustration.png) |
+| natural cave wall, dynamic light, mist low over ground, illustration by josan gonzales and moebius, studio muti, malika favre, rhads, makoto, clean thick line, comics style | ![natural_cave](.github/result_output/natural_cave.png) |
+| A beautiful ultradetailed anime illustration of a city street, trending on artstation | ![anime_street_ilustration](.github/result_output/anime_street_ilustration.png) |
 
 ###  other output
-
-```python
-image_prompt: str = "Harry potter playing basketball"
-img = generator.generate(
-  image_prompt,
-  num_steps = 50,
-  unconditional_guidance_scale = 5.6,
-  temperature = 1,
-  batch_size = 1,
-)
-```
-
-| description | image |
-| ------ | ----- |
-| prompt: indonesia country with cyberpunk style | ![indonesia_country_with_cyberpunk_style](.github/result_output/indonesia_country_with_cyberpunk_style.png) |
-| prompt: 3d detailed woman knight | ![3d_woman_knight](.github/result_output/3d_woman_knight.png)
-| prompt: 3d detailed woman knight (next generation process) | ![3d_woman_knight2](.github/result_output/3d_woman_knight2.png) |
-| prompt: 3d detailed woman knight (next generation process) | ![3d_woman_knight3](.github/result_output/3d_woman_knight3.png) |
-| prompt: 3d detailed woman knight (next generation process) | ![3d_woman_knight4](.github/result_output/3d_woman_knight4.png) |
-| prompt: realistic detailed knight | ![realistic_detailed_knight](.github/result_output/realistic_detailed_knight.png) |
-| prompt: aesthetic art haunted house | ![aesthetic_art_haunted_house](.github/result_output/aesthetic_art_haunted_house.png) |
-| prompt: medival castle realistic and detailed oil painting | ![medival_castle_realistic_and_detailed_oil_painting](.github/result_output/medival_castle_realistic_and_detailed_oil_painting.png) |
-| prompt: harry potter playing basketball | ![harry_potter_playing_basketball](.github/result_output/harry_potter_playing_basket.png) |
-| prompt: harry potter playing guitar     | ![harry_potter_playing_guitar](.github/result_output/harry_potter_playing_guitar.png)     |
-| prompt: person hacking with computer    | ![person_hacking_with_computer](.github/result_output/person_hacking_with_computer.png) |
-| prompt: God wearing mask | ![god_wearing_mask](.github/result_output/god_wearing_mask.png) |
-| prompt: Harry potter random | ![harry_potter_random](.github/result_output/harry_potter_random.png) |
-| prompt: Marilyn monroe with random  art style | ![marilyn_monroe_with_random_art_style](.github/result_output/marilyn_monroe_with_random_art_style.png) |
 
 ---
 
